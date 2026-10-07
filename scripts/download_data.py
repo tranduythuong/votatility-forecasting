@@ -46,7 +46,7 @@ def download_company_data(company_name: str, start_date: str, end_date: str | No
     if data.empty:
         raise RuntimeError(f"Không có dữ liệu cho {symbol} trong khoảng ngày đã chọn.")
 
-    output = Path(__file__).resolve().parent / f"{symbol.lower()}_history.csv"
+    output =  Path.cwd() / f"data/raw/{symbol.lower()}.csv"
     data.to_csv(output, index=False, encoding="utf-8-sig")
     print(f"Đã lưu {len(data)} dòng dữ liệu của {symbol} vào: {output}")
     return data
