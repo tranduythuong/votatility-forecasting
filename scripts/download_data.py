@@ -3,6 +3,8 @@ from pathlib import Path
 
 from vnstock import Listing, Quote
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
 
 def download_company_data(company_name: str, start_date: str, end_date: str | None = None):
     """Tải dữ liệu giá theo ngày cho công ty và lưu thành CSV.
@@ -46,7 +48,9 @@ def download_company_data(company_name: str, start_date: str, end_date: str | No
     if data.empty:
         raise RuntimeError(f"Không có dữ liệu cho {symbol} trong khoảng ngày đã chọn.")
 
-    output = Path(__file__).resolve().parent / f"{symbol.lower()}_history.csv"
+    output_dir = PROJECT_ROOT / "data" / "raw"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output = output_dir / f"{symbol.lower()}.csv"
     data.to_csv(output, index=False, encoding="utf-8-sig")
     print(f"Đã lưu {len(data)} dòng dữ liệu của {symbol} vào: {output}")
     return data
@@ -55,3 +59,6 @@ def download_company_data(company_name: str, start_date: str, end_date: str | No
 if __name__ == "__main__":
     # Có thể truyền mã "ACB" hoặc tên đầy đủ, ví dụ "Ngân hàng Thương mại Cổ phần Á Châu".
     download_company_data("ACB", start_date="2018-01-01")
+    download_company_data("FPT", start_date="2018-01-01")
+    download_company_data("HPG", start_date="2022-03-01",end_date="2022-11-30")
+    
